@@ -22,7 +22,7 @@ jobs:
       - name: Get current version
         id: get_version
         run: |
-          VERSION=$(cat VERSION)
+          VERSION=$(jq -r .version package.json)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check if tag exists

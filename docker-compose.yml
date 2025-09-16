@@ -1,17 +1,13 @@
-version: '3.8'
-
 services:
   todoist-sender:
-    build: .
+    image: ghcr.io/tdavis6/todoist-message-send:latest
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-    env_file:
-      - .env
+      - TODOIST_TOKEN='<ADD TODOIST API TOKEN HERE>'
+      - APP_PASSWORD='<ADD FRONTEND PASSWORD HERE>'
     restart: unless-stopped
-    volumes:
-      - ./public:/app/public:ro
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
       interval: 30s

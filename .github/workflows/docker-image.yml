@@ -39,4 +39,4 @@ jobs:
             ghcr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
       - name: Display image tags
-        run: echo "Tagged images: latest and commit SHA for ${{ env.IMAGE_NAME }}"
+        run: echo "Tagged images latest and commit SHA for ${{ env.IMAGE_NAME }}"

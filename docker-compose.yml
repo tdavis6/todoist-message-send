@@ -2,14 +2,22 @@ services:
   todoist-sender:
     image: ghcr.io/tdavis6/todoist-message-send:latest
     ports:
-      - "3000:3000"
+      - "3000:3000" # Expose port 3000
     environment:
       - NODE_ENV=production
-      - TODOIST_TOKEN='<ADD TODOIST API TOKEN HERE>'
-      - APP_PASSWORD='<ADD FRONTEND PASSWORD HERE>'
+      - TODOIST_TOKEN='' # Your Todoist API token
+      - APP_PASSWORD='' # Set a strong password for accessing the app
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/health",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3

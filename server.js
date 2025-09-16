@@ -115,3 +115,7 @@ app.listen(PORT, () => {
     "Make sure to set TODOIST_TOKEN and APP_PASSWORD in your .env file",
   );
 });
+
+app.get("/package.json", (req, res) => {
+  res.sendFile(path.join(__dirname, "package.json"));
+});

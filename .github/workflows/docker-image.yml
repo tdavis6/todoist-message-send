@@ -1,4 +1,4 @@
-name: Build and Publish Docker Image
+name: Build, Release, and Publish Docker Image
 
 on:
   push:
@@ -7,10 +7,10 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.actor }}/todoist-message-send
+  IMAGE_NAME: ${{ github.repository }}/todoist-message-send
 
 jobs:
-  build-and-push:
+  release-and-publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,6 +18,38 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Get current version
+        id: get_version
+        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: check_tag
+        run: |
+          if git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate release notes
+        id: release_notes
+        if: steps.check_tag.outputs.exists == 'false'
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$LAST_TAG" ]; then
+            git log --pretty=format:"- %s" > release_notes.txt
+          else
+            git log "$LAST_TAG"..HEAD --pretty=format:"- %s" > release_notes.txt
+          fi
+
+      - name: Create GitHub Release
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: ${{ steps.get_version.outputs.version }}
+          body_path: release_notes.txt
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -35,8 +67,8 @@ jobs:
           context: .
           push: true
           tags: |
-                ghcr.io/${{ github.actor }}/todoist-message-send:latest
-                ghcr.io/${{ github.actor }}/todoist-message-send:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/todoist-message-send:latest
+            ghcr.io/${{ github.repository }}/todoist-message-send:${{ steps.get_version.outputs.version }}
 
       - name: Display image tags
-        run: echo "Tagged images latest and commit SHA for ${{ env.IMAGE_NAME }}"
+        run: echo "Tagged images latest and version for ${{ env.IMAGE_NAME }}"

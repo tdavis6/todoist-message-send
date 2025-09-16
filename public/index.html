@@ -162,6 +162,17 @@
             </form>
 
             <div id="messageDisplay" class="message hidden"></div>
+            <footer
+                id="footerVersion"
+                style="
+                    text-align: center;
+                    margin-top: 24px;
+                    color: #888;
+                    font-size: 13px;
+                "
+            >
+                Version loading...
+            </footer>
         </div>
 
         <script>
@@ -214,6 +225,18 @@
                         submitBtn.disabled = false;
                         submitBtn.textContent = "Send to Todoist";
                     }
+                });
+            // Fetch version from package.json and update footer
+            fetch("/package.json")
+                .then((response) => response.json())
+                .then((data) => {
+                    const version = data.version || "unknown";
+                    document.getElementById("footerVersion").textContent =
+                        `Version ${version}`;
+                })
+                .catch(() => {
+                    document.getElementById("footerVersion").textContent =
+                        "Version unavailable";
                 });
         </script>
     </body>

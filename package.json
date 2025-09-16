@@ -1,7 +1,7 @@
 {
   "name": "todoist-link-sender",
-  "version": "1.0.0",
-  "description": "Password-protected form to send links and messages to Todoist",
+  "version": "0.1.0",
+  "description": "Password-protected form to send links and messages to the Todoist inbox",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -22,6 +22,6 @@
     "form",
     "task-management"
   ],
-  "author": "You",
+  "author": "Tyler Davis",
   "license": "MIT"
 }

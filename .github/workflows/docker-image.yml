@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/todoist-message-send
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
 
 jobs:
   release-and-publish:
@@ -21,7 +21,9 @@ jobs:
 
       - name: Get current version
         id: get_version
-        run: echo "version=$(cat VERSION)" >> $GITHUB_OUTPUT
+        run: |
+          VERSION=$(cat VERSION)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check if tag exists
         id: check_tag
@@ -67,8 +69,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/todoist-message-send:latest
-            ghcr.io/${{ github.repository }}/todoist-message-send:${{ steps.get_version.outputs.version }}
+            ${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_NAME }}:${{ steps.get_version.outputs.version }}
 
       - name: Display image tags
         run: echo "Tagged images latest and version for ${{ env.IMAGE_NAME }}"

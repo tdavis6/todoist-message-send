@@ -81,11 +81,11 @@ A simple, password-protected web form for quickly sending messages, links, or ta
 
 ## Configuration
 
-| Variable         | Description                        | Required | Default |
-|------------------|------------------------------------|----------|---------|
-| `TODOIST_TOKEN`  | Todoist API token                  | Yes      |         |
-| `APP_PASSWORD`   | Password to access the form        | Yes      |         |
-| `NODE_ENV`       | Node environment (`production`)    | No       |         |
+| Variable         | Description                        | Required |
+|------------------|------------------------------------|----------|
+| `TODOIST_TOKEN`  | Todoist API token                  | Yes      |
+| `APP_PASSWORD`   | Password to access the form        | Yes      |
+| `NODE_ENV`       | Node environment (`production`)    | No       |
 
 ## Endpoints
 
